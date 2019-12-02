@@ -49,21 +49,21 @@ public class BuildingGenerator : MonoBehaviour
             switch (direction)
             {
                 case 0:
-                    lb = new Vector3(0.5f - Random.Range(0f, baseSize.x * 0.5f), 0f, 0.5f - Random.Range(0f, baseSize.z * 0.5f));
-                    rt = new Vector3(0.5f + Random.Range(0f, baseSize.x * 0.5f), height, baseSize.z);
+                    lb = new Vector3(0.5f * baseSize.x - Random.Range(0f, baseSize.x * 0.5f), 0f, 0.5f * baseSize.z - Random.Range(0f, baseSize.z * 0.5f));
+                    rt = new Vector3(0.5f * baseSize.x + Random.Range(0f, baseSize.x * 0.5f), height, baseSize.z);
                     break;
                 case 1:
 
-                    lb = new Vector3(0.5f - Random.Range(0f, baseSize.x * 0.5f), 0f, 0.5f - Random.Range(0f, baseSize.z * 0.5f));
-                    rt = new Vector3(baseSize.x, height, 0.5f + Random.Range(0f, baseSize.z * 0.5f));
+                    lb = new Vector3(0.5f * baseSize.x - Random.Range(0f, baseSize.x * 0.5f), 0f, 0.5f * baseSize.z - Random.Range(0f, baseSize.z * 0.5f));
+                    rt = new Vector3(baseSize.x, height, 0.5f * baseSize.z + Random.Range(0f, baseSize.z * 0.5f));
                     break;
                 case 2:
-                    lb = new Vector3(0f, 0f, 0.5f - Random.Range(0f, baseSize.z * 0.5f));
-                    rt = new Vector3(0.5f + Random.Range(0f, baseSize.x * 0.5f), height, 0.5f + Random.Range(0f, baseSize.z * 0.5f));
+                    lb = new Vector3(0f, 0f, 0.5f * baseSize.z - Random.Range(0f, baseSize.z * 0.5f));
+                    rt = new Vector3(0.5f * baseSize.x + Random.Range(0f, baseSize.x * 0.5f), height, 0.5f * baseSize.z + Random.Range(0f, baseSize.z * 0.5f));
                     break;
                 case 3:
-                    lb = new Vector3(0.5f - Random.Range(0f, baseSize.x * 0.5f), 0f, 0f);
-                    rt = new Vector3(0.5f + Random.Range(0f, baseSize.x * 0.5f), height, 0.5f + Random.Range(0f, baseSize.z * 0.5f));
+                    lb = new Vector3(0.5f * baseSize.x - Random.Range(0f, baseSize.x * 0.5f), 0f, 0f);
+                    rt = new Vector3(0.5f * baseSize.x + Random.Range(0f, baseSize.x * 0.5f), height, 0.5f * baseSize.z + Random.Range(0f, baseSize.z * 0.5f));
                     break;
             }
 
