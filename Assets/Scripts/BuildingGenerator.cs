@@ -40,7 +40,37 @@ public class BuildingGenerator : MonoBehaviour
 
         // Tiers towers
 
-        // TO DO
+        for (int i = 0; i < tiersLimit; i++)
+        {
+            height = Random.Range(maxHeight * 0.67f, maxHeight);
+
+            int direction = Random.Range(0, 4);
+
+            switch (direction)
+            {
+                case 0:
+                    lb = new Vector3(0.5f - Random.Range(0f, baseSize.x * 0.5f), 0f, 0.5f - Random.Range(0f, baseSize.z * 0.5f));
+                    rt = new Vector3(0.5f + Random.Range(0f, baseSize.x * 0.5f), height, baseSize.z);
+                    break;
+                case 1:
+
+                    lb = new Vector3(0.5f - Random.Range(0f, baseSize.x * 0.5f), 0f, 0.5f - Random.Range(0f, baseSize.z * 0.5f));
+                    rt = new Vector3(baseSize.x, height, 0.5f + Random.Range(0f, baseSize.z * 0.5f));
+                    break;
+                case 2:
+                    lb = new Vector3(0f, 0f, 0.5f - Random.Range(0f, baseSize.z * 0.5f));
+                    rt = new Vector3(0.5f + Random.Range(0f, baseSize.x * 0.5f), height, 0.5f + Random.Range(0f, baseSize.z * 0.5f));
+                    break;
+                case 3:
+                    lb = new Vector3(0.5f - Random.Range(0f, baseSize.x * 0.5f), 0f, 0f);
+                    rt = new Vector3(0.5f + Random.Range(0f, baseSize.x * 0.5f), height, 0.5f + Random.Range(0f, baseSize.z * 0.5f));
+                    break;
+            }
+
+            addBlock(new Block(lb, rt));
+
+            maxHeight = height;
+        }
 
         CreateMesh(vertices, triangles);
     }
@@ -79,5 +109,7 @@ public class BuildingGenerator : MonoBehaviour
 
         gameObject.GetComponent<MeshFilter>().mesh = msh;
         gameObject.GetComponent<MeshRenderer>().material = material;
+
+        gameObject.GetComponent<MeshFilter>().mesh.RecalculateNormals();
     }
 }
