@@ -6,7 +6,7 @@ public class BuildingGenerator : MonoBehaviour
 {
     public Vector2 baseSize;
     public float maxHeight;
-    public Material material;
+    public List<Material> materials;
 
     private Vector3[] vertices;
     private int[] triangles;
@@ -17,11 +17,53 @@ public class BuildingGenerator : MonoBehaviour
     {
         baseSize = new Vector2(Random.Range(1f, 3f), Random.Range(1f, 3f));
         maxHeight = Random.Range(maxHeight * 0.5f, maxHeight);
-        bool buildingType = (Random.Range(0f, 1f) > 0.33f);
-        if (buildingType)
-            MakeBlockBuilding();
-        else
-            MakeRoundBuilding();
+
+        int buildingType = Random.Range(0, 3);
+
+        switch (buildingType)
+        {
+            case 0:
+                MakeBlockBuilding();
+                break;
+            case 1:
+                MakeRoundBuilding();
+                break;
+            case 2:
+                MakeTowerBuilding();
+                break;
+        }
+    }
+
+    void MakeTowerBuilding()
+    {
+        int tiersLimit = Random.Range(2, 6);
+
+        vertices = new Vector3[24 * tiersLimit + 5];
+        triangles = new int[36 * tiersLimit + 12];
+        uv = new Vector2[24 * tiersLimit + 5];
+
+        float height = Random.Range(0.75f * maxHeight, maxHeight);
+        float peakHeight = Random.Range(0.25f, 0.25f * height);
+        height -= peakHeight;
+        height /= 2;
+
+        Vector3 lb = new Vector3(0, 0, 0);
+        Vector3 rt = new Vector3(baseSize.x, 0, baseSize.y);
+
+        for (int i = 0; i < tiersLimit; i++)
+        {
+            lb = new Vector3(lb.x + 0.1f, rt.y, lb.z + 0.1f);
+            rt = new Vector3(rt.x - 0.1f, rt.y + height, rt.z - 0.1f);
+            addBlock(new Block(lb, rt));
+            height /= 2;
+        }
+
+        lb = new Vector3(lb.x + 0.1f, rt.y, lb.z + 0.1f);
+        rt = new Vector3(rt.x - 0.1f, rt.y + height, rt.z - 0.1f);
+
+        addPyramid(new Pyramid(lb, rt, peakHeight));
+
+        CreateMesh(vertices, triangles, uv);
     }
 
     void MakeRoundBuilding()
@@ -147,6 +189,22 @@ public class BuildingGenerator : MonoBehaviour
         }
     }
 
+    void addPyramid(Pyramid pyramid)
+    {
+        foreach (int i in pyramid.getTriangles())
+        {
+            this.triangles[indiceTriangles++] = i + indiceVertices;
+        }
+        foreach (Vector3 v in pyramid.getVertices())
+        {
+            this.vertices[indiceVertices++] = v;
+        }
+        foreach (Vector2 u in pyramid.getUV())
+        {
+            this.uv[indiceUV++] = u;
+        }
+    }
+
     void CreateMesh(Vector3[] vertices, int[] triangles, Vector2[] uv)
     {
         gameObject.AddComponent<MeshFilter>();
@@ -159,7 +217,7 @@ public class BuildingGenerator : MonoBehaviour
         mesh.uv = uv;
 
         gameObject.GetComponent<MeshFilter>().mesh = mesh;
-        gameObject.GetComponent<MeshRenderer>().material = material;
+        gameObject.GetComponent<MeshRenderer>().material = materials[(int)Random.Range(0, materials.Count)];
 
         gameObject.GetComponent<MeshFilter>().mesh.RecalculateNormals();
     }
