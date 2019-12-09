@@ -38,9 +38,9 @@ public class BuildingGenerator : MonoBehaviour
     {
         int tiersLimit = Random.Range(2, 6);
 
-        vertices = new Vector3[24 * tiersLimit + 5];
+        vertices = new Vector3[24 * tiersLimit + 12];
         triangles = new int[36 * tiersLimit + 12];
-        uv = new Vector2[24 * tiersLimit + 5];
+        uv = new Vector2[24 * tiersLimit + 12];
 
         float height = Random.Range(0.75f * maxHeight, maxHeight);
         float peakHeight = Random.Range(0.25f, 0.25f * height);
@@ -50,18 +50,22 @@ public class BuildingGenerator : MonoBehaviour
         Vector3 lb = new Vector3(0, 0, 0);
         Vector3 rt = new Vector3(baseSize.x, 0, baseSize.y);
 
+        Block block;
+
         for (int i = 0; i < tiersLimit; i++)
         {
             lb = new Vector3(lb.x + 0.1f, rt.y, lb.z + 0.1f);
             rt = new Vector3(rt.x - 0.1f, rt.y + height, rt.z - 0.1f);
-            addBlock(new Block(lb, rt));
+            block = new Block(lb, rt);
+            addShape(block.getTriangles(), block.getVertices(), block.getUV());
             height /= 2;
         }
 
         lb = new Vector3(lb.x + 0.1f, rt.y, lb.z + 0.1f);
         rt = new Vector3(rt.x - 0.1f, rt.y + height, rt.z - 0.1f);
 
-        addPyramid(new Pyramid(lb, rt, peakHeight));
+        Pyramid pyramid = new Pyramid(lb, rt, peakHeight);
+        addShape(pyramid.getTriangles(), pyramid.getVertices(), pyramid.getUV());
 
         CreateMesh(vertices, triangles, uv);
     }
@@ -73,23 +77,26 @@ public class BuildingGenerator : MonoBehaviour
         int nbCoupures = Random.Range(0, 11);
         int indiceCoupure = Random.Range(3, nbMeridians / 2 - nbCoupures - 3);
 
-        vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 2 + 50];
+        vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 4 + 50];
         triangles = new int[(nbMeridians - nbCoupures * 2) * 12 + 72];
-        uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 2 + 50];
+        uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 4 + 50];
 
         float height = Random.Range(0.5f * maxHeight, maxHeight);
 
-        addCylinder(new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure));
+        Cylinder cylinder = new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure);
+        addShape(cylinder.getTriangles(), cylinder.getVertices(), cylinder.getUV());
 
         Vector3 lb = new Vector3(baseSize.x / 2 - Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height, baseSize.y / 2 - Random.Range(0.05f * baseSize.y, baseSize.y * 0.05f));
         Vector3 rt = new Vector3(lb.x - Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z - Random.Range(0.05f * baseSize.y, baseSize.y * 0.15f));
 
-        addBlock(new Block(lb, rt));
+        Block block = new Block(lb, rt);
+        addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
         lb = new Vector3(baseSize.x / 2 + Random.Range(0.05f, 0.25f), height, baseSize.y / 2 + Random.Range(0.05f, 0.05f));
         rt = new Vector3(lb.x + Random.Range(0.05f, 0.25f), height + Random.Range(0.05f, 0.1f), lb.z + Random.Range(0.05f, 0.15f));
 
-        addBlock(new Block(lb, rt));
+        block = new Block(lb, rt);
+        addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
         CreateMesh(vertices, triangles, uv);
     }
@@ -118,7 +125,8 @@ public class BuildingGenerator : MonoBehaviour
         lb = new Vector3(0f, 0f, 0f);
         rt = new Vector3(baseSize.x, minHeight, baseSize.y);
 
-        addBlock(new Block(lb, rt));
+        Block block = new Block(lb, rt);
+        addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
         // Main tower
 
@@ -127,7 +135,8 @@ public class BuildingGenerator : MonoBehaviour
         lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.25f), minHeight, Random.Range(0f, baseSize.y * 0.25f));
         rtMain = new Vector3(baseSize.x * 0.75f + Random.Range(0f, baseSize.x * 0.25f), height, baseSize.y * 0.75f + Random.Range(0f, baseSize.y * 0.25f));
 
-        addBlock(new Block(lbMain, rtMain));
+        block = new Block(lbMain, rtMain);
+        addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
         maxHeight = height;
 
@@ -160,7 +169,8 @@ public class BuildingGenerator : MonoBehaviour
                     break;
             }
 
-            addBlock(new Block(lb, rt));
+            block = new Block(lb, rt);
+            addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
             maxHeight = height;
         }
@@ -168,49 +178,17 @@ public class BuildingGenerator : MonoBehaviour
         CreateMesh(vertices, triangles, uv);
     }
 
-    void addBlock(Block block)
+    void addShape(int[] triangles, Vector3[] vertices, Vector2[] uv)
     {
-        foreach (int i in block.getTriangles())
+        foreach (int i in triangles)
         {
             this.triangles[indiceTriangles++] = i + indiceVertices;
         }
-        foreach (Vector3 v in block.getVertices())
+        foreach (Vector3 v in vertices)
         {
             this.vertices[indiceVertices++] = v;
         }
-        foreach (Vector2 u in block.getUV())
-        {
-            this.uv[indiceUV++] = u;
-        }
-    }
-
-    void addCylinder(Cylinder cylinder)
-    {
-        foreach (int i in cylinder.getTriangles())
-        {
-            this.triangles[indiceTriangles++] = i + indiceVertices;
-        }
-        foreach (Vector3 v in cylinder.getVertices())
-        {
-            this.vertices[indiceVertices++] = v;
-        }
-        foreach (Vector2 u in cylinder.getUV())
-        {
-            this.uv[indiceUV++] = u;
-        }
-    }
-
-    void addPyramid(Pyramid pyramid)
-    {
-        foreach (int i in pyramid.getTriangles())
-        {
-            this.triangles[indiceTriangles++] = i + indiceVertices;
-        }
-        foreach (Vector3 v in pyramid.getVertices())
-        {
-            this.vertices[indiceVertices++] = v;
-        }
-        foreach (Vector2 u in pyramid.getUV())
+        foreach (Vector2 u in uv)
         {
             this.uv[indiceUV++] = u;
         }
