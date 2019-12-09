@@ -36,19 +36,19 @@ public class BuildingGenerator : MonoBehaviour
 
     void MakeTowerBuilding()
     {
-        int tiersLimit = Random.Range(2, 6);
+        int tiersLimit = Random.Range(2, 5);
 
         vertices = new Vector3[24 * tiersLimit + 12];
         triangles = new int[36 * tiersLimit + 12];
         uv = new Vector2[24 * tiersLimit + 12];
 
-        float height = Random.Range(0.75f * maxHeight, maxHeight);
+        float height = Random.Range(0.6f * maxHeight, maxHeight);
         float peakHeight = Random.Range(0.25f, 0.25f * height);
         height -= peakHeight;
         height /= 2;
 
         Vector3 lb = new Vector3(0, 0, 0);
-        Vector3 rt = new Vector3(baseSize.x, 0, baseSize.y);
+        Vector3 rt = new Vector3(baseSize.x + 0.1f, 0, baseSize.y + 0.1f);
 
         Block block;
 
@@ -112,7 +112,7 @@ public class BuildingGenerator : MonoBehaviour
         List<int> directions = new List<int>();
         directions.Add(0); directions.Add(1); directions.Add(2); directions.Add(3);
 
-        int tiersLimit = Random.Range(0, 5);
+        int tiersLimit = Random.Range(1, 5);
 
         vertices = new Vector3[24 * (tiersLimit + 2)];
         triangles = new int[36 * (tiersLimit + 2)];
@@ -130,10 +130,10 @@ public class BuildingGenerator : MonoBehaviour
 
         // Main tower
 
-        height = Random.Range(maxHeight * 0.75f, maxHeight);
+        height = Random.Range(maxHeight * 0.7f, maxHeight);
 
-        lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.25f), minHeight, Random.Range(0f, baseSize.y * 0.25f));
-        rtMain = new Vector3(baseSize.x * 0.75f + Random.Range(0f, baseSize.x * 0.25f), height, baseSize.y * 0.75f + Random.Range(0f, baseSize.y * 0.25f));
+        lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.4f), minHeight, Random.Range(0f, baseSize.y * 0.4f));
+        rtMain = new Vector3(baseSize.x * 0.6f + Random.Range(0f, baseSize.x * 0.4f), height, baseSize.y * 0.6f + Random.Range(0f, baseSize.y * 0.4f));
 
         block = new Block(lbMain, rtMain);
         addShape(block.getTriangles(), block.getVertices(), block.getUV());

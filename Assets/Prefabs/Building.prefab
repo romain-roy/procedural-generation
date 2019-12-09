@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSize: {x: 1, y: 1}
-  maxHeight: 5
+  maxHeight: 7
   materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
