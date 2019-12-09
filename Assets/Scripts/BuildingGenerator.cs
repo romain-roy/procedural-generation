@@ -4,161 +4,163 @@ using UnityEngine;
 
 public class BuildingGenerator : MonoBehaviour
 {
-	public Vector2 baseSize;
-	public float maxHeight;
-	public Material material;
+    public Vector2 baseSize;
+    public float maxHeight;
+    public Material material;
 
-	private Vector3[] vertices;
-	private int[] triangles;
-	private Vector2[] uv;
-	private int indiceVertices = 0, indiceTriangles = 0, indiceUV = 0;
+    private Vector3[] vertices;
+    private int[] triangles;
+    private Vector2[] uv;
+    private int indiceVertices = 0, indiceTriangles = 0, indiceUV = 0;
 
-	void Start()
-	{
-		bool buildingType = (Random.Range(0f, 1f) > 0.33f);
-		if (buildingType)
-			MakeBlockBuilding();
-		else
-			MakeRoundBuilding();
-	}
+    void Start()
+    {
+        baseSize = new Vector2(Random.Range(1f, 3f), Random.Range(1f, 3f));
+        maxHeight = Random.Range(maxHeight * 0.5f, maxHeight);
+        bool buildingType = (Random.Range(0f, 1f) > 0.33f);
+        if (buildingType)
+            MakeBlockBuilding();
+        else
+            MakeRoundBuilding();
+    }
 
-	void MakeRoundBuilding()
-	{
-		int nbMeridians = 36;
+    void MakeRoundBuilding()
+    {
+        int nbMeridians = 36;
 
-		int nbCoupures = Random.Range(0, 11);
-		int indiceCoupure = Random.Range(3, nbMeridians / 2 - nbCoupures - 3);
+        int nbCoupures = Random.Range(0, 11);
+        int indiceCoupure = Random.Range(3, nbMeridians / 2 - nbCoupures - 3);
 
-		vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 2 + 2];
-		triangles = new int[(nbMeridians - nbCoupures * 2) * 12];
-		uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 2 + 2];
+        vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 2 + 2];
+        triangles = new int[(nbMeridians - nbCoupures * 2) * 12];
+        uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 2 + 2];
 
-		float height = Random.Range(0.75f * maxHeight, maxHeight);
+        float height = Random.Range(0.75f * maxHeight, maxHeight);
 
-		addCylinder(new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure));
-		CreateMesh(vertices, triangles, uv);
-	}
+        addCylinder(new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure));
+        CreateMesh(vertices, triangles, uv);
+    }
 
-	void MakeBlockBuilding()
-	{
-		// Initialisation
+    void MakeBlockBuilding()
+    {
+        // Initialisation
 
-		float minHeight, height;
-		Vector3 lbMain, rtMain;
-		Vector3 lb, rt;
+        float minHeight, height;
+        Vector3 lbMain, rtMain;
+        Vector3 lb, rt;
 
-		List<int> directions = new List<int>();
-		directions.Add(0); directions.Add(1); directions.Add(2); directions.Add(3);
+        List<int> directions = new List<int>();
+        directions.Add(0); directions.Add(1); directions.Add(2); directions.Add(3);
 
-		int tiersLimit = Random.Range(0, 5);
+        int tiersLimit = Random.Range(0, 5);
 
-		vertices = new Vector3[24 * (tiersLimit + 2)];
-		triangles = new int[36 * (tiersLimit + 2)];
-		uv = new Vector2[24 * (tiersLimit + 2)];
+        vertices = new Vector3[24 * (tiersLimit + 2)];
+        triangles = new int[36 * (tiersLimit + 2)];
+        uv = new Vector2[24 * (tiersLimit + 2)];
 
-		// Base
+        // Base
 
-		minHeight = Random.Range(0.1f, 0.5f);
+        minHeight = Random.Range(0.1f, 0.5f);
 
-		lb = new Vector3(0f, 0f, 0f);
-		rt = new Vector3(baseSize.x, minHeight, baseSize.y);
+        lb = new Vector3(0f, 0f, 0f);
+        rt = new Vector3(baseSize.x, minHeight, baseSize.y);
 
-		addBlock(new Block(lb, rt));
+        addBlock(new Block(lb, rt));
 
-		// Main tower
+        // Main tower
 
-		height = Random.Range(maxHeight * 0.75f, maxHeight);
+        height = Random.Range(maxHeight * 0.75f, maxHeight);
 
-		lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.25f), minHeight, Random.Range(0f, baseSize.y * 0.25f));
-		rtMain = new Vector3(baseSize.x * 0.75f + Random.Range(0f, baseSize.x * 0.25f), height, baseSize.y * 0.75f + Random.Range(0f, baseSize.y * 0.25f));
+        lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.25f), minHeight, Random.Range(0f, baseSize.y * 0.25f));
+        rtMain = new Vector3(baseSize.x * 0.75f + Random.Range(0f, baseSize.x * 0.25f), height, baseSize.y * 0.75f + Random.Range(0f, baseSize.y * 0.25f));
 
-		addBlock(new Block(lbMain, rtMain));
+        addBlock(new Block(lbMain, rtMain));
 
-		maxHeight = height;
+        maxHeight = height;
 
-		// Tiers towers
+        // Tiers towers
 
-		for (int i = 0; i < tiersLimit; i++)
-		{
-			height = Random.Range(maxHeight * 0.75f, maxHeight);
+        for (int i = 0; i < tiersLimit; i++)
+        {
+            height = Random.Range(maxHeight * 0.75f, maxHeight);
 
-			int direction = directions[Random.Range(0, directions.Count)];
-			directions.Remove(direction);
+            int direction = directions[Random.Range(0, directions.Count)];
+            directions.Remove(direction);
 
-			switch (direction)
-			{
-				case 0:
-					lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
-					rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, baseSize.y);
-					break;
-				case 1:
-					lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
-					rt = new Vector3(baseSize.x, height, Random.Range(rtMain.z, baseSize.y * 0.5f));
-					break;
-				case 2:
-					lb = new Vector3(0f, minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
-					rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, Random.Range(rtMain.z, baseSize.y * 0.5f));
-					break;
-				case 3:
-					lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, 0f);
-					rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, Random.Range(rtMain.z, baseSize.y * 0.5f));
-					break;
-			}
+            switch (direction)
+            {
+                case 0:
+                    lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
+                    rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, baseSize.y);
+                    break;
+                case 1:
+                    lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
+                    rt = new Vector3(baseSize.x, height, Random.Range(rtMain.z, baseSize.y * 0.5f));
+                    break;
+                case 2:
+                    lb = new Vector3(0f, minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
+                    rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, Random.Range(rtMain.z, baseSize.y * 0.5f));
+                    break;
+                case 3:
+                    lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, 0f);
+                    rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, Random.Range(rtMain.z, baseSize.y * 0.5f));
+                    break;
+            }
 
-			addBlock(new Block(lb, rt));
+            addBlock(new Block(lb, rt));
 
-			maxHeight = height;
-		}
+            maxHeight = height;
+        }
 
-		CreateMesh(vertices, triangles, uv);
-	}
+        CreateMesh(vertices, triangles, uv);
+    }
 
-	void addBlock(Block block)
-	{
-		foreach (int i in block.getTriangles())
-		{
-			this.triangles[indiceTriangles++] = i + indiceVertices;
-		}
-		foreach (Vector3 v in block.getVertices())
-		{
-			this.vertices[indiceVertices++] = v;
-		}
-		foreach (Vector2 u in block.getUV())
-		{
-			this.uv[indiceUV++] = u;
-		}
-	}
+    void addBlock(Block block)
+    {
+        foreach (int i in block.getTriangles())
+        {
+            this.triangles[indiceTriangles++] = i + indiceVertices;
+        }
+        foreach (Vector3 v in block.getVertices())
+        {
+            this.vertices[indiceVertices++] = v;
+        }
+        foreach (Vector2 u in block.getUV())
+        {
+            this.uv[indiceUV++] = u;
+        }
+    }
 
-	void addCylinder(Cylinder cylinder)
-	{
-		foreach (int i in cylinder.getTriangles())
-		{
-			this.triangles[indiceTriangles++] = i + indiceVertices;
-		}
-		foreach (Vector3 v in cylinder.getVertices())
-		{
-			this.vertices[indiceVertices++] = v;
-		}
-		foreach (Vector2 u in cylinder.getUV())
-		{
-			this.uv[indiceUV++] = u;
-		}
-	}
+    void addCylinder(Cylinder cylinder)
+    {
+        foreach (int i in cylinder.getTriangles())
+        {
+            this.triangles[indiceTriangles++] = i + indiceVertices;
+        }
+        foreach (Vector3 v in cylinder.getVertices())
+        {
+            this.vertices[indiceVertices++] = v;
+        }
+        foreach (Vector2 u in cylinder.getUV())
+        {
+            this.uv[indiceUV++] = u;
+        }
+    }
 
-	void CreateMesh(Vector3[] vertices, int[] triangles, Vector2[] uv)
-	{
-		gameObject.AddComponent<MeshFilter>();
-		gameObject.AddComponent<MeshRenderer>();
+    void CreateMesh(Vector3[] vertices, int[] triangles, Vector2[] uv)
+    {
+        gameObject.AddComponent<MeshFilter>();
+        gameObject.AddComponent<MeshRenderer>();
 
-		Mesh mesh = new Mesh();
+        Mesh mesh = new Mesh();
 
-		mesh.vertices = vertices;
-		mesh.triangles = triangles;
-		mesh.uv = uv;
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+        mesh.uv = uv;
 
-		gameObject.GetComponent<MeshFilter>().mesh = mesh;
-		gameObject.GetComponent<MeshRenderer>().material = material;
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
+        gameObject.GetComponent<MeshRenderer>().material = material;
 
-		gameObject.GetComponent<MeshFilter>().mesh.RecalculateNormals();
-	}
+        gameObject.GetComponent<MeshFilter>().mesh.RecalculateNormals();
+    }
 }

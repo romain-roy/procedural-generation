@@ -45,4 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseSize: {x: 1, y: 1}
   maxHeight: 3
-  material: {fileID: 2100000, guid: 2e6965f2887cbc04a90f3b92d28f90c4, type: 2}
+  material: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
