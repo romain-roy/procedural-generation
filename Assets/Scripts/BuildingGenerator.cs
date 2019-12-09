@@ -73,13 +73,24 @@ public class BuildingGenerator : MonoBehaviour
         int nbCoupures = Random.Range(0, 11);
         int indiceCoupure = Random.Range(3, nbMeridians / 2 - nbCoupures - 3);
 
-        vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 2 + 2];
-        triangles = new int[(nbMeridians - nbCoupures * 2) * 12];
-        uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 2 + 2];
+        vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 2 + 50];
+        triangles = new int[(nbMeridians - nbCoupures * 2) * 12 + 72];
+        uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 2 + 50];
 
-        float height = Random.Range(0.75f * maxHeight, maxHeight);
+        float height = Random.Range(0.5f * maxHeight, maxHeight);
 
         addCylinder(new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure));
+
+        Vector3 lb = new Vector3(baseSize.x / 2 - Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height, baseSize.y / 2 - Random.Range(0.05f * baseSize.y, baseSize.y * 0.05f));
+        Vector3 rt = new Vector3(lb.x - Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z - Random.Range(0.05f * baseSize.y, baseSize.y * 0.15f));
+
+        addBlock(new Block(lb, rt));
+
+        lb = new Vector3(baseSize.x / 2 + Random.Range(0.05f, 0.25f), height, baseSize.y / 2 + Random.Range(0.05f, 0.05f));
+        rt = new Vector3(lb.x + Random.Range(0.05f, 0.25f), height + Random.Range(0.05f, 0.1f), lb.z + Random.Range(0.05f, 0.15f));
+
+        addBlock(new Block(lb, rt));
+
         CreateMesh(vertices, triangles, uv);
     }
 
