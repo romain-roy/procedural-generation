@@ -15,7 +15,7 @@ public class BuildingGenerator : MonoBehaviour
 
 	void Start()
 	{
-		baseSize = new Vector2(Random.Range(1f, 3f), Random.Range(1f, 3f));
+		baseSize = new Vector2(Random.Range(1f, 2.5f), Random.Range(1f, 2.5f));
 		maxHeight = Random.Range(maxHeight * 0.5f, maxHeight);
 
 		int buildingType = Random.Range(0, 3);
@@ -86,14 +86,14 @@ public class BuildingGenerator : MonoBehaviour
 		Cylinder cylinder = new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure);
 		addShape(cylinder.getTriangles(), cylinder.getVertices(), cylinder.getUV());
 
-		Vector3 lb = new Vector3(baseSize.x / 2 - Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height, baseSize.y / 2 - Random.Range(0.05f * baseSize.y, 0.25f * baseSize.y));
-		Vector3 rt = new Vector3(lb.x - Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z - Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
+		Vector3 lb = new Vector3(baseSize.x / 2 - Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 - Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
+		Vector3 rt = new Vector3(lb.x - Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z - Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
 
 		Block block = new Block(lb, rt);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
-		lb = new Vector3(baseSize.x / 2 + Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height, baseSize.y / 2 + Random.Range(0.05f * baseSize.y, 0.25f * baseSize.y));
-		rt = new Vector3(lb.x + Random.Range(0.05f * baseSize.x, 0.25f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z + Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
+		lb = new Vector3(baseSize.x / 2 + Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 + Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
+		rt = new Vector3(lb.x + Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z + Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
 
 		block = new Block(lb, rt);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
