@@ -43,6 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 665766cc846eacd4ba6602f0060fb0fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 10}
+  size: {x: 25, y: 25}
   building: {fileID: 3941711093077284156, guid: 362645661ba305f438343c0910944fcb,
     type: 3}
+  cityLights:
+  - {fileID: 8356372522570867284, guid: 8e8d24c2c4ede594893e375e86fd5811, type: 3}
+  - {fileID: 7531568366723290975, guid: 3fd894960404c0f45937a2b5990d99b4, type: 3}
+  - {fileID: 7803618865302700238, guid: d84434b7bb82cff499e3838298c9c32f, type: 3}

@@ -6,7 +6,7 @@ public class BuildingGenerator : MonoBehaviour
 {
 	public Vector2 baseSize; // Largeur et longueur
 	public float maxHeight; // Hauteur
-	public Material material; // Matériau
+	public List<Material> materials; // Matériau
 
 
 	// Composants du mesh
@@ -17,7 +17,7 @@ public class BuildingGenerator : MonoBehaviour
 
 	void Start()
 	{
-		baseSize = new Vector2(Random.Range(1f, 2.5f), Random.Range(1f, 2.5f));
+		baseSize = new Vector2(Random.Range(1f, baseSize.x), Random.Range(1f, baseSize.y));
 		maxHeight = Random.Range(maxHeight * 0.5f, maxHeight);
 
 		int buildingType = Random.Range(0, 3);
@@ -60,7 +60,7 @@ public class BuildingGenerator : MonoBehaviour
 		lb = new Vector3(0f, 0f, 0f);
 		rt = new Vector3(baseSize.x, minHeight, baseSize.y);
 
-		Block block = new Block(lb, rt);
+		Block block = new Block(lb, rt, false);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		// Main tower
@@ -70,7 +70,7 @@ public class BuildingGenerator : MonoBehaviour
 		lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.4f), minHeight, Random.Range(0f, baseSize.y * 0.4f));
 		rtMain = new Vector3(baseSize.x * 0.6f + Random.Range(0f, baseSize.x * 0.4f), height, baseSize.y * 0.6f + Random.Range(0f, baseSize.y * 0.4f));
 
-		block = new Block(lbMain, rtMain);
+		block = new Block(lbMain, rtMain, true);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		maxHeight = height;
@@ -104,7 +104,7 @@ public class BuildingGenerator : MonoBehaviour
 					break;
 			}
 
-			block = new Block(lb, rt);
+			block = new Block(lb, rt, true);
 			addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 			maxHeight = height;
@@ -132,13 +132,13 @@ public class BuildingGenerator : MonoBehaviour
 		Vector3 lb = new Vector3(baseSize.x / 2 - Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 - Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
 		Vector3 rt = new Vector3(lb.x - Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z - Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
 
-		Block block = new Block(lb, rt);
+		Block block = new Block(lb, rt, false);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		lb = new Vector3(baseSize.x / 2 + Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 + Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
 		rt = new Vector3(lb.x + Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z + Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
 
-		block = new Block(lb, rt);
+		block = new Block(lb, rt, false);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		CreateMesh(vertices, triangles, uv);
@@ -166,7 +166,7 @@ public class BuildingGenerator : MonoBehaviour
 		{
 			lb = new Vector3(lb.x + 0.1f, rt.y, lb.z + 0.1f);
 			rt = new Vector3(rt.x - 0.1f, rt.y + height, rt.z - 0.1f);
-			block = new Block(lb, rt);
+			block = new Block(lb, rt, true);
 			addShape(block.getTriangles(), block.getVertices(), block.getUV());
 			height /= 2;
 		}
@@ -208,7 +208,7 @@ public class BuildingGenerator : MonoBehaviour
 		mesh.uv = uv;
 
 		gameObject.GetComponent<MeshFilter>().mesh = mesh;
-		gameObject.GetComponent<MeshRenderer>().material = material;
+		gameObject.GetComponent<MeshRenderer>().material = materials[(int)Random.Range(0, materials.Count)];
 
 		gameObject.GetComponent<MeshFilter>().mesh.RecalculateNormals();
 	}

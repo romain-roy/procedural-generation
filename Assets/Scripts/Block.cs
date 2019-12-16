@@ -8,7 +8,7 @@ public class Block
 	private int[] triangles = new int[36];
 	private Vector2[] uv = new Vector2[24];
 
-	public Block(Vector3 lb, Vector3 rt)
+	public Block(Vector3 lb, Vector3 rt, bool withUV)
 	{
 		/* VERTICES */
 
@@ -43,36 +43,43 @@ public class Block
 		vertices[23] = vertices[1];
 
 		/* UV */
+		if (withUV)
+		{
+			uv[0] = new Vector2(0, 0);
+			uv[1] = new Vector2(1, 0);
+			uv[2] = new Vector2(0, 1);
+			uv[3] = new Vector2(1, 1);
 
-		uv[0] = new Vector2(0, 0);
-		uv[1] = new Vector2(1, 0);
-		uv[2] = new Vector2(0, 1);
-		uv[3] = new Vector2(1, 1);
+			uv[4] = new Vector2(0, 0);
+			uv[5] = new Vector2(1, 0);
+			uv[6] = new Vector2(0, 1);
+			uv[7] = new Vector2(1, 1);
 
-		uv[4] = new Vector2(0, 0);
-		uv[5] = new Vector2(1, 0);
-		uv[6] = new Vector2(0, 1);
-		uv[7] = new Vector2(1, 1);
+			uv[8] = new Vector2(0, 0);
+			uv[9] = new Vector2(1, 0);
+			uv[10] = new Vector2(0, 1);
+			uv[11] = new Vector2(1, 1);
 
-		uv[8] = new Vector2(0, 0);
-		uv[9] = new Vector2(1, 0);
-		uv[10] = new Vector2(0, 1);
-		uv[11] = new Vector2(1, 1);
+			uv[12] = new Vector2(0, 0);
+			uv[13] = new Vector2(1, 0);
+			uv[14] = new Vector2(0, 1);
+			uv[15] = new Vector2(1, 1);
 
-		uv[12] = new Vector2(0, 0);
-		uv[13] = new Vector2(1, 0);
-		uv[14] = new Vector2(0, 1);
-		uv[15] = new Vector2(1, 1);
+			uv[16] = new Vector2(0, 0);
+			uv[17] = new Vector2(0, 0);
+			uv[18] = new Vector2(0, 0);
+			uv[19] = new Vector2(0, 0);
 
-		uv[16] = new Vector2(0, 0);
-		uv[17] = new Vector2(1, 0);
-		uv[18] = new Vector2(0, 1);
-		uv[19] = new Vector2(1, 1);
-
-		uv[20] = new Vector2(0, 0);
-		uv[21] = new Vector2(1, 0);
-		uv[22] = new Vector2(0, 1);
-		uv[23] = new Vector2(1, 1);
+			uv[20] = new Vector2(1, 1);
+			uv[21] = new Vector2(1, 1);
+			uv[22] = new Vector2(1, 1);
+			uv[23] = new Vector2(1, 1);
+		}
+		else
+		{
+			for (int i = 0; i < 24; i++)
+				uv[i] = new Vector2(0, 0);
+		}
 
 		/* TRIANGLES */
 
