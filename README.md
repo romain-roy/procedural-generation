@@ -7,3 +7,4 @@ Génération procédurale d'une ville remplie de buildings de formes et de textu
 Pour exécuter le projet, ouvrez-le avec Unity 2019.2.15f1 ou ultérieur.
 
 ![Capture](/Images/Capture.png)
+![Capture](/Images/Capture2.png)

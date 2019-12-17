@@ -29,7 +29,7 @@ public class CityGenerator : MonoBehaviour
 		{
 			for (float y = -size.y / 2f; y < size.y / 2f; y++)
 			{
-				Instantiate(building, new Vector3(4f * x, 0f, 4f * y), Quaternion.identity);
+				Instantiate(building, new Vector3(3f * x, 0f, 3f * y), Quaternion.identity);
 				i++;
 			}
 		}
