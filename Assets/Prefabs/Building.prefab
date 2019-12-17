@@ -47,4 +47,4 @@ MonoBehaviour:
   maxHeight: 7
   windowSize: 0.05
   materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: b2ef5618b2c53b648a8f33a0df63eeef, type: 2}
