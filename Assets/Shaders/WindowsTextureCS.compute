@@ -1,0 +1,111 @@
+﻿#pragma kernel Main
+
+#define ThreadX 8
+#define ThreadY 8
+
+#define Width ThreadX
+#define Height ThreadY
+#define BorderX 1
+#define BorderY 1
+#define WindowWidth (Width - BorderX * 2)
+#define WindowHeight (Height - BorderY * 2)
+#define WidthOff (Width - BorderX)
+#define HeightOff (Height - BorderY)
+
+#define ColoringPixels 10
+#define TotalWindowPixels (WindowWidth * WindowHeight)
+#define TotalWindowPixelsMap (1.0 / TotalWindowPixels)
+
+#include "Random.cginc"
+#include "PerlinNoise2D.cginc"
+
+
+RWTexture2D<float4> windowTex;
+uint randSeed;
+float noiseFrequency;
+float4 wallColor, mainColor;
+
+
+uint uiround(float v)
+{
+    return (uint)(abs(v) + 0.5);
+}
+
+int iround(float v)
+{
+    return (int)(v + 0.5);
+}
+
+float4 color_blend(float4 c1, float4 c2)
+{
+    float a1 = c1.a;
+    float a2 = c2.a;
+    float a = a2 + (1.0 - a2) * a1;
+
+    return (a2 * c2 + (1.0 - a2) * a1 * c1) / a;
+}
+
+[numthreads(ThreadX, ThreadY, 1)]
+void Main(uint3 dispatchThreadID : SV_DispatchThreadID, uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
+{
+    uint xOff = dispatchThreadID.x;
+    uint yOff = dispatchThreadID.y;
+    uint x = groupThreadID.x;
+    uint y = groupThreadID.y;
+
+    if (x < BorderY || x >= WidthOff || y < BorderY || y >= HeightOff)
+    {
+        windowTex[dispatchThreadID.xy] = wallColor;
+        return;
+    }
+
+    float4 c = float4(1.0, 1.0, 1.0, 1.0);
+
+    uint shared_rand_state = rand_hash(groupID.x * groupID.x + groupID.y * groupID.y + randSeed * randSeed);
+    uint rand_state = rand_hash(xOff * xOff + yOff * yOff + randSeed * randSeed);
+
+    // Put something in bottom
+    if (rand01(shared_rand_state) < 0.6)
+    {
+        uint three_quarters = (uint)(WindowWidth * 0.75);
+
+        uint width = uiround(rand01(shared_rand_state) * (WindowWidth - three_quarters)) + three_quarters;
+        uint off = uiround(rand01(shared_rand_state) * (WindowWidth - width));
+
+        if (x > off&& x <= off + width && y < 4)
+        {
+            c = float4(0.0, 0.0, 0.0, 1.0);
+        }
+    }
+
+    // Put random color in
+    if (rand01(rand_state) < 0.6 || rand(rand_state, 10) < 2)
+    {
+        uint pixels = ColoringPixels + uiround(rand(rand_state, ColoringPixels));
+
+        if (rand01(rand_state) < pixels * TotalWindowPixelsMap)
+        {
+            float r = 0.25 + rand(rand_state, 0.75);
+            float g = 0.25 + rand(rand_state, 0.75);
+            float b = 0.25 + rand(rand_state, 0.75);
+
+            c = float4(r, g, b, 1.0);
+        }
+    }
+
+    float width, height;
+    windowTex.GetDimensions(width, height);
+    float noise = perlinNoise(float2(groupID.x / width, groupID.y / height) * noiseFrequency) * 0.5 + 0.5;
+
+    //// darken
+    uint bright = uiround(rand(shared_rand_state, 10) * noise);
+    float dark_alpha = bright < 1 ? 0.2 : (
+        bright < 4 ? 1.0 : (
+            bright < 7 ? 0.8 : 0.9
+            )
+        );
+
+    windowTex[dispatchThreadID.xy] = mainColor.a <= 0.5f ?
+        color_blend(float4(c.rgb, dark_alpha), float4(mainColor.rgb, dark_alpha)) :
+        color_blend(c, float4(mainColor.rgb, dark_alpha));
+}

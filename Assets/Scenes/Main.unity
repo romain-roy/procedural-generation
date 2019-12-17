@@ -275,13 +275,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 544413985}
-  m_LocalRotation: {x: 0.9512513, y: 0.044943422, z: 0.25488698, w: -0.16773117}
+  m_LocalRotation: {x: 0.92290634, y: 0.12423011, z: 0.24681285, w: -0.2681312}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 200, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 213.796, y: -27.906982, z: -6.700012}
 --- !u!114 &544413988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +400,11 @@ PrefabInstance:
       propertyPath: size.y
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 3045228058747420984, guid: a1e88e29cd61fc342b874b09cd4c9e08,
+        type: 3}
+      propertyPath: material
+      value: 
+      objectReference: {fileID: 2100000, guid: bf9903ad182b57141aa519fcd9168e49, type: 2}
     - target: {fileID: 3045228058747420985, guid: a1e88e29cd61fc342b874b09cd4c9e08,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -457,3 +462,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1e88e29cd61fc342b874b09cd4c9e08, type: 3}
+--- !u!1 &2056703852 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3045228058747420934, guid: a1e88e29cd61fc342b874b09cd4c9e08,
+    type: 3}
+  m_PrefabInstance: {fileID: 911372448}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2056703853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056703852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52116048c25559a419ef8e93abc5548b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  computeShader1: {fileID: 7200000, guid: 7e45c6303d61469459b8d6d530a83098, type: 3}
+  computeShader2: {fileID: 7200000, guid: 0bbd8b0b2488af448bc828139817546f, type: 3}
+  wallColor: {r: 0, g: 0, b: 0, a: 1}
+  mainColor: {r: 0, g: 0, b: 0, a: 1}
+  width: 256
+  height: 256
+  noiseFrequency: 150

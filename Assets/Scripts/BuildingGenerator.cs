@@ -6,6 +6,7 @@ public class BuildingGenerator : MonoBehaviour
 {
 	public Vector2 baseSize; // Largeur et longueur
 	public float maxHeight; // Hauteur
+    public float windowSize = .05f;
 	public List<Material> materials; // Matériau
 
 
@@ -17,12 +18,12 @@ public class BuildingGenerator : MonoBehaviour
 
 	void Start()
 	{
-		baseSize = new Vector2(Random.Range(1f, baseSize.x), Random.Range(1f, baseSize.y));
-		maxHeight = Random.Range(maxHeight * 0.5f, maxHeight);
+		baseSize = new Vector2(UnityEngine.Random.Range(1f, baseSize.x), UnityEngine.Random.Range(1f, baseSize.y));
+		maxHeight = UnityEngine.Random.Range(maxHeight * 0.5f, maxHeight);
 
-		int buildingType = Random.Range(0, 3);
+		int buildingType = UnityEngine.Random.Range(0, 3);
 
-		switch (buildingType)
+        switch (buildingType)
 		{
 			case 0:
 				MakeBlockBuilding();
@@ -47,7 +48,7 @@ public class BuildingGenerator : MonoBehaviour
 		List<int> directions = new List<int>(); // Servira plus tard pour distribuer les sous blocs sur les côtés de la tour principale
 		directions.Add(0); directions.Add(1); directions.Add(2); directions.Add(3);
 
-		int tiersLimit = Random.Range(1, 5); // Nombre de sous blocs
+		int tiersLimit = UnityEngine.Random.Range(1, 5); // Nombre de sous blocs
 
 		vertices = new Vector3[24 * (tiersLimit + 2)];
 		triangles = new int[36 * (tiersLimit + 2)];
@@ -55,22 +56,22 @@ public class BuildingGenerator : MonoBehaviour
 
 		// Base
 
-		minHeight = Random.Range(0.1f, 0.5f);
+		minHeight = UnityEngine.Random.Range(0.1f, 0.5f);
 
 		lb = new Vector3(0f, 0f, 0f);
 		rt = new Vector3(baseSize.x, minHeight, baseSize.y);
 
-		Block block = new Block(lb, rt, false);
+		Block block = new Block(lb, rt, false, windowSize);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		// Main tower
 
-		height = Random.Range(maxHeight * 0.7f, maxHeight);
+		height = UnityEngine.Random.Range(maxHeight * 0.7f, maxHeight);
 
-		lbMain = new Vector3(Random.Range(0f, baseSize.x * 0.4f), minHeight, Random.Range(0f, baseSize.y * 0.4f));
-		rtMain = new Vector3(baseSize.x * 0.6f + Random.Range(0f, baseSize.x * 0.4f), height, baseSize.y * 0.6f + Random.Range(0f, baseSize.y * 0.4f));
+		lbMain = new Vector3(UnityEngine.Random.Range(0f, baseSize.x * 0.4f), minHeight, UnityEngine.Random.Range(0f, baseSize.y * 0.4f));
+		rtMain = new Vector3(baseSize.x * 0.6f + UnityEngine.Random.Range(0f, baseSize.x * 0.4f), height, baseSize.y * 0.6f + UnityEngine.Random.Range(0f, baseSize.y * 0.4f));
 
-		block = new Block(lbMain, rtMain, true);
+		block = new Block(lbMain, rtMain, true, windowSize);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		maxHeight = height;
@@ -79,32 +80,32 @@ public class BuildingGenerator : MonoBehaviour
 
 		for (int i = 0; i < tiersLimit; i++)
 		{
-			height = Random.Range(maxHeight * 0.75f, maxHeight);
+			height = UnityEngine.Random.Range(maxHeight * 0.75f, maxHeight);
 
-			int direction = directions[Random.Range(0, directions.Count)];
+			int direction = directions[UnityEngine.Random.Range(0, directions.Count)];
 			directions.Remove(direction);
 
 			switch (direction)
 			{
 				case 0:
-					lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
-					rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, baseSize.y);
+					lb = new Vector3(UnityEngine.Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, UnityEngine.Random.Range(0.5f * baseSize.y, lbMain.z));
+					rt = new Vector3(UnityEngine.Random.Range(0.5f * baseSize.x, rtMain.x), height, baseSize.y);
 					break;
 				case 1:
-					lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
-					rt = new Vector3(baseSize.x, height, Random.Range(rtMain.z, baseSize.y * 0.5f));
+					lb = new Vector3(UnityEngine.Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, UnityEngine.Random.Range(0.5f * baseSize.y, lbMain.z));
+					rt = new Vector3(baseSize.x, height, UnityEngine.Random.Range(rtMain.z, baseSize.y * 0.5f));
 					break;
 				case 2:
-					lb = new Vector3(0f, minHeight, Random.Range(0.5f * baseSize.y, lbMain.z));
-					rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, Random.Range(rtMain.z, baseSize.y * 0.5f));
+					lb = new Vector3(0f, minHeight, UnityEngine.Random.Range(0.5f * baseSize.y, lbMain.z));
+					rt = new Vector3(UnityEngine.Random.Range(0.5f * baseSize.x, rtMain.x), height, UnityEngine.Random.Range(rtMain.z, baseSize.y * 0.5f));
 					break;
 				case 3:
-					lb = new Vector3(Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, 0f);
-					rt = new Vector3(Random.Range(0.5f * baseSize.x, rtMain.x), height, Random.Range(rtMain.z, baseSize.y * 0.5f));
+					lb = new Vector3(UnityEngine.Random.Range(lbMain.x, 0.5f * baseSize.x), minHeight, 0f);
+					rt = new Vector3(UnityEngine.Random.Range(0.5f * baseSize.x, rtMain.x), height, UnityEngine.Random.Range(rtMain.z, baseSize.y * 0.5f));
 					break;
 			}
 
-			block = new Block(lb, rt, true);
+			block = new Block(lb, rt, true, windowSize);
 			addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 			maxHeight = height;
@@ -117,28 +118,28 @@ public class BuildingGenerator : MonoBehaviour
 	{
 		int nbMeridians = 36;
 
-		int nbCoupures = Random.Range(0, 11);
-		int indiceCoupure = Random.Range(3, nbMeridians / 2 - nbCoupures - 3);
+		int nbCoupures = UnityEngine.Random.Range(0, 11);
+		int indiceCoupure = UnityEngine.Random.Range(3, nbMeridians / 2 - nbCoupures - 3);
 
 		vertices = new Vector3[(nbMeridians + 1 - nbCoupures * 2) * 4 + 50];
 		triangles = new int[(nbMeridians - nbCoupures * 2) * 12 + 72];
 		uv = new Vector2[(nbMeridians + 1 - nbCoupures * 2) * 4 + 50];
 
-		float height = Random.Range(0.5f * maxHeight, maxHeight);
+		float height = UnityEngine.Random.Range(0.5f * maxHeight, maxHeight);
 
 		Cylinder cylinder = new Cylinder(baseSize, height, nbMeridians, nbCoupures, indiceCoupure);
 		addShape(cylinder.getTriangles(), cylinder.getVertices(), cylinder.getUV());
 
-		Vector3 lb = new Vector3(baseSize.x / 2 - Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 - Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
-		Vector3 rt = new Vector3(lb.x - Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z - Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
+		Vector3 lb = new Vector3(baseSize.x / 2 - UnityEngine.Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 - UnityEngine.Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
+		Vector3 rt = new Vector3(lb.x - UnityEngine.Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + UnityEngine.Random.Range(0.05f, 0.1f), lb.z - UnityEngine.Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
 
-		Block block = new Block(lb, rt, false);
+		Block block = new Block(lb, rt, false, windowSize);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
-		lb = new Vector3(baseSize.x / 2 + Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 + Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
-		rt = new Vector3(lb.x + Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + Random.Range(0.05f, 0.1f), lb.z + Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
+		lb = new Vector3(baseSize.x / 2 + UnityEngine.Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height, baseSize.y / 2 + UnityEngine.Random.Range(0.05f * baseSize.y, 0.15f * baseSize.y));
+		rt = new Vector3(lb.x + UnityEngine.Random.Range(0.05f * baseSize.x, 0.15f * baseSize.x), height + UnityEngine.Random.Range(0.05f, 0.1f), lb.z + UnityEngine.Random.Range(0.05f * baseSize.y, 0.1f * baseSize.y));
 
-		block = new Block(lb, rt, false);
+		block = new Block(lb, rt, false, windowSize);
 		addShape(block.getTriangles(), block.getVertices(), block.getUV());
 
 		CreateMesh(vertices, triangles, uv);
@@ -146,14 +147,14 @@ public class BuildingGenerator : MonoBehaviour
 
 	void MakeTowerBuilding()
 	{
-		int tiersLimit = Random.Range(2, 5);
+		int tiersLimit = UnityEngine.Random.Range(2, 5);
 
 		vertices = new Vector3[24 * tiersLimit + 12];
 		triangles = new int[36 * tiersLimit + 12];
 		uv = new Vector2[24 * tiersLimit + 12];
 
-		float height = Random.Range(0.6f * maxHeight, maxHeight);
-		float peakHeight = Random.Range(0.25f, 0.25f * height);
+		float height = UnityEngine.Random.Range(0.6f * maxHeight, maxHeight);
+		float peakHeight = UnityEngine.Random.Range(0.25f, 0.25f * height);
 		height -= peakHeight;
 		height /= 2;
 
@@ -166,7 +167,7 @@ public class BuildingGenerator : MonoBehaviour
 		{
 			lb = new Vector3(lb.x + 0.1f, rt.y, lb.z + 0.1f);
 			rt = new Vector3(rt.x - 0.1f, rt.y + height, rt.z - 0.1f);
-			block = new Block(lb, rt, true);
+			block = new Block(lb, rt, true, windowSize);
 			addShape(block.getTriangles(), block.getVertices(), block.getUV());
 			height /= 2;
 		}
@@ -208,7 +209,7 @@ public class BuildingGenerator : MonoBehaviour
 		mesh.uv = uv;
 
 		gameObject.GetComponent<MeshFilter>().mesh = mesh;
-		gameObject.GetComponent<MeshRenderer>().material = materials[(int)Random.Range(0, materials.Count)];
+		gameObject.GetComponent<MeshRenderer>().material = materials[(int)UnityEngine.Random.Range(0, materials.Count)];
 
 		gameObject.GetComponent<MeshFilter>().mesh.RecalculateNormals();
 	}

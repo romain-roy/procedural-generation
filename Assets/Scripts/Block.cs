@@ -8,7 +8,7 @@ public class Block
 	private int[] triangles = new int[36];
 	private Vector2[] uv = new Vector2[24];
 
-	public Block(Vector3 lb, Vector3 rt, bool withUV)
+	public Block(Vector3 lb, Vector3 rt, bool withUV, float windowSize)
 	{
 		/* VERTICES */
 
@@ -44,26 +44,30 @@ public class Block
 
 		/* UV */
 		if (withUV)
-		{
-			uv[0] = new Vector2(0, 0);
-			uv[1] = new Vector2(1, 0);
-			uv[2] = new Vector2(0, 1);
-			uv[3] = new Vector2(1, 1);
+        {
+            float height = Mathf.Abs(lb.y - rt.y);
+            float width = Mathf.Abs(lb.x - rt.x);
+            float depth = Mathf.Abs(lb.z - rt.z);
+
+            uv[0] = new Vector2(0, 0);
+			uv[1] = new Vector2(width / windowSize / 64, 0);
+			uv[2] = new Vector2(0, height / windowSize / 64);
+			uv[3] = new Vector2(width / windowSize / 64, height / windowSize / 64);
 
 			uv[4] = new Vector2(0, 0);
-			uv[5] = new Vector2(1, 0);
-			uv[6] = new Vector2(0, 1);
-			uv[7] = new Vector2(1, 1);
+			uv[5] = new Vector2(depth / windowSize / 64, 0);
+			uv[6] = new Vector2(0, height / windowSize / 64);
+			uv[7] = new Vector2(depth / windowSize / 64, height / windowSize / 64);
 
 			uv[8] = new Vector2(0, 0);
-			uv[9] = new Vector2(1, 0);
-			uv[10] = new Vector2(0, 1);
-			uv[11] = new Vector2(1, 1);
+			uv[9] = new Vector2(width / windowSize / 64, 0);
+			uv[10] = new Vector2(0, height / windowSize / 64);
+			uv[11] = new Vector2(width / windowSize / 64, height / windowSize / 64);
 
-			uv[12] = new Vector2(0, 0);
-			uv[13] = new Vector2(1, 0);
-			uv[14] = new Vector2(0, 1);
-			uv[15] = new Vector2(1, 1);
+            uv[12] = new Vector2(0, 0);
+			uv[13] = new Vector2(depth / windowSize / 64, 0);
+			uv[14] = new Vector2(0, height / windowSize / 64);
+			uv[15] = new Vector2(depth / windowSize / 64, height / windowSize / 64);
 
 			uv[16] = new Vector2(0, 0);
 			uv[17] = new Vector2(0, 0);
