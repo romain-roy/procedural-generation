@@ -46,5 +46,4 @@ MonoBehaviour:
   baseSize: {x: 1, y: 1}
   maxHeight: 7
   materials:
-  - {fileID: 2100000, guid: 2e6965f2887cbc04a90f3b92d28f90c4, type: 2}
   - {fileID: 2100000, guid: b2ef5618b2c53b648a8f33a0df63eeef, type: 2}
